@@ -107,13 +107,13 @@ public class Converter {
      * @param character current character in the expression
      */
     private void handleOperator(Character character) {
-        if (isOperator(character) && !stack.isEmpty() && stack.peek() != '(') {
-//            if (!stack.isEmpty() && stack.peek() != '(') {
+        if (isOperator(character)) {
+            if (!stack.isEmpty() && stack.peek() != '(') {
                 while (!stack.isEmpty() && stack.peek() != '(' && precedence(character) <= precedence(stack.peek())) {
                     Character topOperator = stack.pop();
                     queue.enqueue(topOperator);
                 }
-//            }
+            }
             stack.push(character);
         }
     }
