@@ -51,6 +51,51 @@ public class Converter {
     }
 
     /**
+     * Returns an int with the operators precedence
+     *
+     * @param operator operator currently being passed in
+     * @return int of the precedence of the operator
+     */
+    private int precedence(Character operator) {
+        return switch (operator) {
+            case '^' -> 3;
+            case '*', '/', '%' -> 2;
+            case '+', '-' -> 1;
+            default -> 0;
+        };
+    }
+
+    /**
+     * Returns true if the character passed in is an operator.
+     *
+     * @param character current character in the expression
+     * @return true if character is an operator
+     */
+    private boolean isOperator(char character) {
+        return (character == '^' || character == '*' ||
+                character == '/' || character == '%' ||
+                character == '+' || character == '-' ||
+                character == '=');
+    }
+
+    /**
+     * Determines if the operator passed in has a L-R associative
+     * or R-L associative
+     * <p>
+     * L-R = true
+     * R-L = false
+     *
+     * @param operator operator being currently passed in
+     * @return boolean showing associative
+     */
+    private boolean leftToRight(Character operator) {
+        return switch (operator) {
+            case '=', '^' -> false;
+            default -> true;
+        };
+    }
+
+    /**
      * Handles the character passed in accordingly if it is an operand.
      * If the character is not an operator, left parentheses, or right parentheses it will
      * add it to the queue.
@@ -96,7 +141,7 @@ public class Converter {
 
     /**
      * Handles the character passed in accordingly if it is an operator.
-     *
+     * <p>
      * If the character passed in is an operator and the stack isn't empty and the top isn't a left parentheses.
      * We loop through the stack until we encounter a left parentheses, as we are looping we are checking
      * the precedence of the operators popped off the stack and the operator passed in.
@@ -108,10 +153,21 @@ public class Converter {
      */
     private void handleOperator(Character character) {
         if (isOperator(character)) {
-            if (!stack.isEmpty() && stack.peek() != '(') {
-                while (!stack.isEmpty() && stack.peek() != '(' && precedence(character) <= precedence(stack.peek())) {
+
+            boolean cleanStack = !stack.isEmpty() && stack.peek() != '(';
+            boolean lowerPrecedence = cleanStack && precedence(character) < precedence(stack.peek());
+            boolean samePrecedence = cleanStack && precedence(character) == precedence(stack.peek());
+
+            if (cleanStack) {
+
+                while (lowerPrecedence || (samePrecedence && leftToRight(character))) {
+
                     Character topOperator = stack.pop();
                     queue.enqueue(topOperator);
+
+                    cleanStack = !stack.isEmpty() && stack.peek() != '(';
+                    lowerPrecedence = cleanStack && precedence(character) < precedence(stack.peek());
+                    samePrecedence = cleanStack && precedence(character) == precedence(stack.peek());
                 }
             }
             stack.push(character);
@@ -128,46 +184,4 @@ public class Converter {
             queue.enqueue(topOperator);
         }
     }
-
-    /**
-     * Returns an int with the operators precedence
-     * @param operator operator currently being passed in
-     * @return int of the precedence of the operator
-     */
-    private int precedence(Character operator) {
-        return switch (operator) {
-            case '^' -> 3;
-            case '*', '/', '%' -> 2;
-            case '+', '-' -> 1;
-            default -> 0;
-        };
-    }
-
-    /**
-     * Returns true if the character passed in is an operator.
-     * @param character current character in the expression
-     * @return true if character is an operator
-     */
-    private boolean isOperator(char character) {
-        return (character == '^' || character == '*' ||
-                character == '/' || character == '%' ||
-                character == '+' || character == '-' ||
-                character == '=');
-    }
-
-//    /**
-//     * Determines if the operator passed in has a L-R associative
-//     * or R-L associative
-//     *
-//     * R-L = -1
-//     * L-R = 1
-//     * @param operator operator being currently passed in
-//     * @return int showing associative
-//     */
-//    private int associative(Character operator) {
-//        return switch (operator) {
-//            case '=', '^' -> -1;
-//            default -> 1;
-//        };
-//    }
 }

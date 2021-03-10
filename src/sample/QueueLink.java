@@ -89,4 +89,10 @@ public class QueueLink<T> implements QueueADT<T> {
     public int size() {
         return count;
     }
+
+    public void print() {
+        for (Node ptr = head; ptr != null; ptr = ptr.getNext()) {
+            System.out.println(ptr.getElement());
+        }
+    }
 }

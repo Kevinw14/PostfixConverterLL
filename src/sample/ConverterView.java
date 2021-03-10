@@ -29,7 +29,9 @@ public class ConverterView extends Application {
 
     public ConverterView() {
         infixTextField = new TextField();
-        infixTextField.setText("A*(B+C)/D");
+        infixTextField.setText("L=M=N=A+B*C/D-F%G^H^I");
+//        infixTextField.setText("N=K=4");
+//        infixTextField.setText("A+B+C");
         postfixLabel = new Label();
         Button convertButton = new Button("Convert");
         Button showButton = new Button("Show");

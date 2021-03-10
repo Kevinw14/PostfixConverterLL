@@ -46,6 +46,7 @@ public class Controller implements ConverterViewDelegate {
     @Override
     public void showButtonPressed(ActionEvent event) {
         String postfix = converter.postfixExpression();
+        System.out.println(postfix);
         view.getPostfixLabel().setText(postfix);
     }
 }
