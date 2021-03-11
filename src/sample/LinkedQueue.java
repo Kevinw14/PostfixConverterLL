@@ -6,12 +6,12 @@ package sample;
  *
  * @param <T> QueueLink can accept any type of object
  */
-public class QueueLink<T> implements QueueADT<T> {
+public class LinkedQueue<T> implements QueueADT<T> {
 
     private int count;
     private Node<T> head, tail;
 
-    public QueueLink() {
+    public LinkedQueue() {
         count = 0;
         head = null;
         tail = null;

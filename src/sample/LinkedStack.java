@@ -8,12 +8,12 @@ import java.util.EmptyStackException;
  *
  * @param <T> StackLink can accept any type of object
  */
-public class StackLink<T> implements StackADT<T> {
+public class LinkedStack<T> implements StackADT<T> {
 
     private int count;
     private Node<T> head;
 
-    public StackLink() {
+    public LinkedStack() {
         count = 0;
         head = null;
     }

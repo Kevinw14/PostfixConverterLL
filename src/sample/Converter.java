@@ -6,12 +6,12 @@ package sample;
  */
 public class Converter {
 
-    private final StackLink<Character> stack;
-    private final QueueLink<Character> queue;
+    private final LinkedStack<Character> stack;
+    private final LinkedQueue<Character> queue;
 
     public Converter() {
-        stack = new StackLink<>();
-        queue = new QueueLink<>();
+        stack = new LinkedStack<>();
+        queue = new LinkedQueue<>();
     }
 
     /**
