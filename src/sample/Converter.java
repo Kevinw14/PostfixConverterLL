@@ -8,8 +8,12 @@ public class Converter {
 
     private final LinkedStack<Character> stack;
     private final LinkedQueue<Character> queue;
+    private int operators;
+    private int operands;
 
     public Converter() {
+        operators = 0;
+        operands = 0;
         stack = new LinkedStack<>();
         queue = new LinkedQueue<>();
     }
@@ -38,16 +42,26 @@ public class Converter {
      *
      * @param expression the infix expression we want to evaluate.
      */
-    public void convert(String expression) {
+    public void convert(String expression) throws InfixExpressionException {
 
-        for (int i = 0; i < expression.length(); i++) {
-            char character = expression.charAt(i);
-            handleOperand(character);
-            handleLeftParentheses(character);
-            handleRightParentheses(character);
-            handleOperator(character);
+        clearExpression();
+        if (expression.length() < 3)
+            throw new InfixExpressionException();
+        else {
+            for (int i = 0; i < expression.length(); i++) {
+                char character = expression.charAt(i);
+                handleOperand(character);
+                handleLeftParentheses(character);
+                handleRightParentheses(character);
+                handleOperator(character);
+            }
+            popRestOfStack();
+
+            if (operators >= operands) {
+                clearExpression();
+                throw new InfixExpressionException();
+            }
         }
-        popRestOfStack();
     }
 
     /**
@@ -105,6 +119,7 @@ public class Converter {
     private void handleOperand(Character character) {
         if (!isOperator(character) && character != '(' && character != ')') {
             queue.enqueue(character);
+            operands++;
         }
     }
 
@@ -134,6 +149,7 @@ public class Converter {
             while (!stack.isEmpty() && stack.peek() != '(') {
                 Character topOperator = stack.pop();
                 queue.enqueue(topOperator);
+                operators++;
             }
             stack.pop();
         }
@@ -164,6 +180,7 @@ public class Converter {
 
                     Character topOperator = stack.pop();
                     queue.enqueue(topOperator);
+                    operators++;
 
                     cleanStack = !stack.isEmpty() && stack.peek() != '(';
                     lowerPrecedence = cleanStack && precedence(character) < precedence(stack.peek());
@@ -182,6 +199,18 @@ public class Converter {
         while (!stack.isEmpty()) {
             Character topOperator = stack.pop();
             queue.enqueue(topOperator);
+            operators++;
+        }
+    }
+
+    /**
+     * Clears the queue of any values.
+     */
+    private void clearExpression() {
+        operands = 0;
+        operators = 0;
+        while (!queue.isEmpty()) {
+            queue.dequeue();
         }
     }
 }

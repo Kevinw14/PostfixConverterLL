@@ -8,6 +8,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 /**
@@ -22,6 +23,7 @@ public class ConverterView extends Application {
 
     private final TextField infixTextField;
     private final Label postfixLabel;
+    private final Label errorLabel;
 
     private ConverterViewDelegate delegate;
 
@@ -29,10 +31,9 @@ public class ConverterView extends Application {
 
     public ConverterView() {
         infixTextField = new TextField();
-        infixTextField.setText("L=M=N=A+B*C/D-F%G^H^I");
-//        infixTextField.setText("N=K=4");
-//        infixTextField.setText("A+B+C");
         postfixLabel = new Label();
+        errorLabel = new Label();
+        errorLabel.setTextFill(Color.web("#f25c54"));
         Button convertButton = new Button("Convert");
         Button showButton = new Button("Show");
 
@@ -41,6 +42,7 @@ public class ConverterView extends Application {
         view.add(postfixLabel,2, 0);
         view.add(convertButton,1, 1);
         view.add(showButton, 2, 1);
+        view.add(errorLabel, 1, 2);
         view.setHgap(80);
         view.setVgap(80);
         Insets insets = new Insets(50,0,0,0);
@@ -88,6 +90,7 @@ public class ConverterView extends Application {
     public TextField getInfixTextField() {
         return infixTextField;
     }
+    public Label getErrorLabel() { return errorLabel; }
     public Label getPostfixLabel() {
         return postfixLabel;
     }

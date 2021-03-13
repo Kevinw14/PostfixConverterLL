@@ -32,8 +32,14 @@ public class Controller implements ConverterViewDelegate {
      */
     @Override
     public void convertButtonPressed(ActionEvent event) {
-        String expression = view.getInfixTextField().getText();
-        converter.convert(expression);
+        try {
+            String expression = view.getInfixTextField().getText();
+            converter.convert(expression);
+            view.getErrorLabel().setText("");
+        } catch(InfixExpressionException exception) {
+            view.getErrorLabel().setText(exception.getLocalizedMessage());
+            view.getPostfixLabel().setText("");
+        }
     }
 
     /**
@@ -46,7 +52,6 @@ public class Controller implements ConverterViewDelegate {
     @Override
     public void showButtonPressed(ActionEvent event) {
         String postfix = converter.postfixExpression();
-        System.out.println(postfix);
         view.getPostfixLabel().setText(postfix);
     }
 }
